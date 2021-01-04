@@ -12,7 +12,7 @@ const Layout = (props) => {
     <div className="container my-4 py-4">
       {props.children}
     </div>
-    <footer className="fixed-bottom p-3 bg-dark">
+    <footer className="p-3 bg-dark">
       <div>
         <span className="text-secondary">Developed by Cesar Poumian</span>
       </div>
