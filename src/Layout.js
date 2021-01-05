@@ -7,7 +7,8 @@ const Layout = (props) => {
     <nav className="navbar bg-dark navbar-expand-lg">
         <Link to="/" className="logo navbar-brand font-weight-bold">
           Currency Exchange
-        </Link>       
+        </Link>
+        <Link to="/swapper">Currency Swapper</Link>       
     </nav>
     <div className="container my-4 py-4">
       {props.children}

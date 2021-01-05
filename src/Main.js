@@ -1,7 +1,8 @@
 import React from 'react';
-// Custom imports
-import currency_list from './utilities/currency_list';
+// Custom modules
 import Table from './Table'
+// Custom utilities
+import currency_list from './utilities/currency_list';
 import { checkRequestStatus, json } from './utilities/miscMethods';
 
 class Main extends React.Component {
