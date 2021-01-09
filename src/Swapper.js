@@ -102,12 +102,12 @@ class Swapper extends React.Component {
 
     return(
       <>
-      <div className="mb-3">
-        <h2>Currency Swapper</h2>
-        <h3> 1 {currency_list[baseTicker].name} = {rate.toFixed(3)} {currency_list[quoteTicker].name}</h3>
+        <div className="mb-5 d-flex flex-column align-items-center">
+        <h2 className="primaryText">Currency Swapper</h2>
+        <h3 className="secondaryText"> 1 {currency_list[baseTicker].name} = {rate.toFixed(3)} {currency_list[quoteTicker].name}</h3>
       </div>
-      <form className="form-row">
-        <div className="form-group">
+      <form className="d-flex flex-column align-items-center">
+        <div className="form-group col-8 col-md-6 col-lg-4 mb-0">
           <select value={baseTicker} onChange={this.changeBaseTicker} className="form-control mb-2">
             {currencies}
           </select>
@@ -122,7 +122,7 @@ class Swapper extends React.Component {
         <div className="col-md-2 d-flex justify-content-center align-items-center">
           <h3>=</h3>
         </div>
-        <div className="form-group col-md-5">
+        <div className="form-group col-8 col-md-6 col-lg-4 mb-0">
           <select value={quoteTicker} onChange={this.changeQuoteTicker} className="form-control mb-2">
             {currencies}
           </select>

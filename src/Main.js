@@ -52,17 +52,21 @@ class Main extends React.Component {
 
     return (
       <>
-        <h2>Currency Exchange; a simple exchange rate reference and currency converter.</h2>
-        <form className="">          
-            <h3 className="mb-4">Base currency</h3>
-            <span className="mr-2">1</span>
-            <select value={base} onChange={this.handleChange} className="mr-1 form-control-sm">
-              {Object.keys(currency_list).map((ticker) => {
-                return <option key={ticker} value={ticker}>{ticker}</option>
-              })}
-            </select>
-            <span> equals </span>
-        </form>
+        <h2 className="mb-4 primaryText">Currency Exchange; a simple exchange rate reference and currency converter.</h2>
+        <div className="d-flex flex-column">
+          <div className="col-sm-6 col-lg-4 align-self-start">
+            <div className="row align-items-baseline">
+              <h4 className="my-4" id="currencySelectorLabel">Base currency</h4>
+              <form className="form-inline ml-3">
+                  <select value={base} onChange={this.handleChange} className="form-control-sm mr-1">
+                    {Object.keys(currency_list).map((ticker) => {
+                      return <option key={ticker} value={ticker}>{ticker}</option>
+                    })}
+                  </select>
+              </form>            
+            </div>            
+          </div>
+        </div>        
         <Table base={base} rates={rates} />
       </>
     );

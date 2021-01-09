@@ -1,3 +1,29 @@
-.logo {
-  color: white;
+#container {
+  min-height: 100vh;
+}
+
+/* Extra-small devices */
+.primaryText {
+  font-size: 1.5rem;
+}
+
+.secondaryText {
+  font-size: 1rem;
+}
+
+#currencySelectorLabel {
+  font-size: 1rem;
+}
+
+/* Medium devices and above */
+@media (min-width: 768px) {
+  .primaryText {
+    font-size: 2rem;
+  }  
+  .secondaryText {
+    font-size: 1.5rem;
+  }
+  #currencySelectorLabel {
+    font-size: 1.5rem;
+  }  
 }
