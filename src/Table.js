@@ -1,4 +1,6 @@
 import React from 'react';
+// Custom utilities
+import currency_list from './utilities/currency_list'
 
 const Table = (props) => {
   
@@ -9,25 +11,27 @@ const Table = (props) => {
   }
 
   return (
-    <table className="table mt-5">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col" className="text-right py-3 pr-5">1.00 {base}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rates.map((currency) => {
-          return (
-            <tr key={currency.ticker}>
-              <td className="pl-5 py-3">{currency.name} ({currency.ticker})</td>
-              <td className="text-right py-3 pr-5">{currency.rate.toFixed(6)}</td>
-            </tr>            
+    <div className="table-responsive-sm">
+      <table className="table table-striped table-hover mt-2 mt-md-3">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">{currency_list[base].name}</th>
+            <th scope="col" className="text-right py-3 pr-5">1.00 {base}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rates.map((currency) => {
+            return (
+              <tr key={currency.ticker}>
+                <td className="pl-5 py-3">{currency.name} ({currency.ticker})</td>
+                <td className="text-right py-3 pr-5">{currency.rate.toFixed(6)}</td>
+              </tr>
             );
           }
-        )}
-      </tbody>
-    </table>
+          )}
+        </tbody>
+      </table>      
+    </div>
   )
 
 }
