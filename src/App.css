@@ -1,3 +1,7 @@
+body {
+  height: 100vh;
+}
+
 #container {
   min-height: 100vh;
 }
@@ -15,7 +19,12 @@
   font-size: 1rem;
 }
 
-/* Medium devices and above */
+.deco-none, .deco-none:link, .deco-none:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Media queries: medium devices and above */
 @media (min-width: 768px) {
   .primaryText {
     font-size: 2rem;

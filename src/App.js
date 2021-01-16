@@ -4,8 +4,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Layout from './Layout';
 import Main from './Main';
 import Swapper from './Swapper';
-//Custom styles
-import './App.css';
 
 const App = () => {
   return (

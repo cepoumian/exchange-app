@@ -10,7 +10,8 @@ class Main extends React.Component {
     super(props);
     this.state = {
       base: 'MXN',
-      rates: null
+      rates: null,
+      loading: true
     }
     this.handleChange = this.handleChange.bind(this);
     this.getRates = this.getRates.bind(this);
@@ -26,6 +27,7 @@ class Main extends React.Component {
   }
 
   getRates(base) {
+    this.setState({ loading: true });
     fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${base}`)
     .then(checkRequestStatus)
     .then(json)
@@ -42,13 +44,13 @@ class Main extends React.Component {
             name: currency_list[ticker].name,
             symbol: currency_list[ticker].symbol
           }))
-      this.setState({ rates });
+      this.setState({ rates, loading: false });
     })
     .catch(error => console.error(error.message))
   }
 
   render() {
-    const { base, rates } = this.state;
+    const { base, rates, loading } = this.state;
 
     return (
       <>
@@ -58,7 +60,7 @@ class Main extends React.Component {
             <div className="row align-items-baseline">
               <h4 className="my-4" id="currencySelectorLabel">Base currency</h4>
               <form className="form-inline ml-3">
-                  <select value={base} onChange={this.handleChange} className="form-control-sm mr-1">
+                  <select value={base} onChange={this.handleChange} className="form-control-sm mr-1" disabled={loading}>
                     {Object.keys(currency_list).map((ticker) => {
                       return <option key={ticker} value={ticker}>{ticker}</option>
                     })}

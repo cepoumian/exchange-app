@@ -7,12 +7,17 @@ import { checkRequestStatus, json } from './utilities/miscMethods';
 class Swapper extends React.Component {
   constructor(props) {
     super(props);
+
+    const params = new URLSearchParams(props.location.search);
+    console.log(params.get('base'), params.get('quote'));
+    
     this.state = {
       rate: 0,
-      baseTicker: 'MXN',
+      baseTicker: params.get('base') || 'MXN',
       baseValue: 0,
-      quoteTicker: 'USD',
-      quoteValue: 0, 
+      quoteTicker: params.get('quote') || 'USD',
+      quoteValue: 0,
+      loading: false
     };
     this.getRate = this.getRate.bind(this);
     this.changeBaseTicker = this.changeBaseTicker.bind(this);
@@ -27,6 +32,7 @@ class Swapper extends React.Component {
   }
 
   getRate(base, quote) {
+    this.setState({ loading: true });
     fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${base}&symbols=${quote}`)
     .then(checkRequestStatus)
     .then(json)
@@ -40,7 +46,8 @@ class Swapper extends React.Component {
       this.setState({
         rate,
         baseValue: 1,
-        quoteValue: Number((1 * rate).toFixed(3))        
+        quoteValue: Number((1 * rate).toFixed(3)),
+        loading: false        
       });
 
     })
@@ -93,7 +100,7 @@ class Swapper extends React.Component {
   }
 
   render() {
-    const { rate, baseTicker, baseValue, quoteTicker, quoteValue } = this.state;
+    const { rate, baseTicker, baseValue, quoteTicker, quoteValue, loading } = this.state;
 
     const currencies = Object.keys(currency_list)
     .map((ticker) => {
@@ -108,7 +115,7 @@ class Swapper extends React.Component {
       </div>
       <form className="d-flex flex-column align-items-center">
         <div className="form-group col-8 col-md-6 col-lg-4 mb-0">
-          <select value={baseTicker} onChange={this.changeBaseTicker} className="form-control mb-2">
+          <select value={baseTicker} onChange={this.changeBaseTicker} className="form-control mb-2" disabled={loading}>
             {currencies}
           </select>
           <div className="input-group">
@@ -123,7 +130,7 @@ class Swapper extends React.Component {
           <h3>=</h3>
         </div>
         <div className="form-group col-8 col-md-6 col-lg-4 mb-0">
-          <select value={quoteTicker} onChange={this.changeQuoteTicker} className="form-control mb-2">
+            <select value={quoteTicker} onChange={this.changeQuoteTicker} className="form-control mb-2" disabled={loading}>
             {currencies}
           </select>
           <div className="input-group">
