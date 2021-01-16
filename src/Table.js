@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // Custom utilities
 import currency_list from './utilities/currency_list'
 
@@ -24,7 +25,9 @@ const Table = (props) => {
             return (
               <tr key={currency.ticker}>
                 <td className="pl-5 py-3">{currency.name} ({currency.ticker})</td>
-                <td className="text-right py-3 pr-5">{currency.rate.toFixed(6)}</td>
+                <td className="text-right py-3 pr-5">
+                  <Link className="deco-none" to={`/Swapper?base=${base}&quote=${currency.ticker}`}>{currency.rate.toFixed(6)}</Link>
+                </td>
               </tr>
             );
           }
