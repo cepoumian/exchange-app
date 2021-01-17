@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Chart from 'chart.js'
 //Custom utilities
 import currency_list from './utilities/currency_list.js';
 import { checkRequestStatus, json } from './utilities/miscMethods';
@@ -9,7 +9,6 @@ class Swapper extends React.Component {
     super(props);
 
     const params = new URLSearchParams(props.location.search);
-    console.log(params.get('base'), params.get('quote'));
     
     this.state = {
       rate: 0,
@@ -19,16 +18,20 @@ class Swapper extends React.Component {
       quoteValue: 0,
       loading: false
     };
+    this.chartRef = React.createRef();
     this.getRate = this.getRate.bind(this);
     this.changeBaseTicker = this.changeBaseTicker.bind(this);
     this.changeBaseValue = this.changeBaseValue.bind(this);
     this.changeQuoteTicker = this.changeQuoteTicker.bind(this);
     this.changeQuoteValue = this.changeQuoteValue.bind(this);
+    this.getHistoricalRates = this.getHistoricalRates.bind(this);
+    this.buildChart = this.buildChart.bind(this);
   }
 
   componentDidMount() {
     const { baseTicker, quoteTicker } = this.state;
     this.getRate(baseTicker, quoteTicker);
+    this.getHistoricalRates(baseTicker, quoteTicker );
   }
 
   getRate(base, quote) {
@@ -75,6 +78,7 @@ class Swapper extends React.Component {
     const baseTicker = event.target.value;
     this.setState({ baseTicker });
     this.getRate(baseTicker, this.state.quoteTicker);
+    this.getHistoricalRates(baseTicker, this.state.quoteTicker);
   }
 
   changeBaseValue(event) {
@@ -89,6 +93,7 @@ class Swapper extends React.Component {
     const quoteTicker = event.target.value;
     this.setState({ quoteTicker });
     this.getRate(this.state.baseTicker, quoteTicker);
+    this.getHistoricalRates(this.state.baseTicker, quoteTicker );
   }
 
   changeQuoteValue(event) {
@@ -97,6 +102,52 @@ class Swapper extends React.Component {
       quoteValue: event.target.value,
       baseValue
     });      
+  }
+
+  getHistoricalRates(base, quote) {
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = new Date((new Date).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+
+    fetch(`https://alt-exchange-rate.herokuapp.com/history?start_at=${startDate}&end_at=${endDate}&base=${base}&symbols=${quote}`)
+    .then(checkRequestStatus)
+    .then(json)
+    .then(data => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      const chartLabels = Object.keys(data.rates);
+      const chartData = Object.values(data.rates).map(rate => rate[quote]);
+      const chartLabel = `${base}/${quote}`;
+      this.buildChart(chartLabels, chartData, chartLabel);
+    })
+    .catch(error => console.error(error.message));
+  }
+
+  buildChart(labels, data, label) {
+    const chartRef = this.chartRef.current.getContext("2d");
+
+    if (typeof this.chart !== "undefined") {
+      this.chart.destroy();
+    }
+
+    this.chart = new Chart(this.chartRef.current.getContext("2d"), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: label,
+            data,
+            fill: false,
+            tension: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
   }
 
   render() {
@@ -142,6 +193,7 @@ class Swapper extends React.Component {
           <small className="text-secondary">{currency_list[quoteTicker].name}</small>       
         </div>
       </form>
+      <canvas ref={this.chartRef} className="py-5"/>
       </>
     );
   }
